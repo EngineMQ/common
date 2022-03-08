@@ -2,6 +2,7 @@ import { Static, Type } from '@sinclair/typebox';
 
 
 
+
 /* Client side */
 
 export type ClientMessageType = 'hello' | 'heartbeat' | 'subscribe' | 'publish' | 'deliveryAck' | 'deliveryResolve' | 'deliveryReject';
@@ -58,6 +59,7 @@ export const ClientMessageDeliveryAck = Type.Object({
     rejectReason: Type.Optional(Type.Object({})),
     rejectRetryDelayMs: Type.Optional(Type.Number()),
 });
+
 
 
 
