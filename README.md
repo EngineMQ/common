@@ -1,1 +1,1 @@
-# Shared type library for Engine-MQ
+# Shared type library for EngineMQ
