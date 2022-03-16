@@ -133,9 +133,28 @@ export class BufferedSocket extends EventEmitter {
             ageMs: new Date().getTime() - this.createdAt,
             ageHuman: prettyMilliseconds(new Date().getTime() - this.createdAt, { compact: true }),
             inBytes: this.socket.bytesRead,
+            inBytesHuman: prettyBytes(this.socket.bytesRead),
             outBytes: this.socket.bytesWritten,
+            outBytesHuman: prettyBytes(this.socket.bytesWritten),
             inPackets: this.packetStat.inPackets,
+            inPacketsHuman: prettyThousand(this.packetStat.inPackets),
             outPackets: this.packetStat.outPackets,
+            outPacketsHuman: prettyThousand(this.packetStat.outPackets),
         }
     }
+}
+
+const prettyThousand = (value: number) => {
+    if (value > 2 * 1000 * 1000)
+        return `${Math.round(value / 1000 / 1000)}M`;
+    if (value > 2 * 1000)
+        return `${Math.round(value / 1000)}k`;
+    return value;
+}
+const prettyBytes = (value: number) => {
+    if (value > 2 * 1024 * 1024)
+        return `${Math.round(value / 1024 / 1024)}MB`;
+    if (value > 2 * 1024)
+        return `${Math.round(value / 1024)}kB`;
+    return `${value}B`;
 }
