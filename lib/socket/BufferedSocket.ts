@@ -145,6 +145,8 @@ export class BufferedSocket extends EventEmitter {
 }
 
 const prettyThousand = (value: number) => {
+    if (value > 2 * 1000 * 1000 * 1000)
+        return `${Math.round(value / 1000 / 1000 / 1000)}G`;
     if (value > 2 * 1000 * 1000)
         return `${Math.round(value / 1000 / 1000)}M`;
     if (value > 2 * 1000)
@@ -152,6 +154,8 @@ const prettyThousand = (value: number) => {
     return value;
 }
 const prettyBytes = (value: number) => {
+    if (value > 2 * 1024 * 1024 * 1024)
+        return `${Math.round(value / 1024 / 1024 / 1024)}GB`;
     if (value > 2 * 1024 * 1024)
         return `${Math.round(value / 1024 / 1024)}MB`;
     if (value > 2 * 1024)
