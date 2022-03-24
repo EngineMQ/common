@@ -82,6 +82,7 @@ export const BrokerMessageHeartbeat = Type.Object({});
 export type BrokerMessagePublishAck = Static<typeof BrokerMessagePublishAck>;
 export const BrokerMessagePublishAck = Type.Object({
     messageId: Type.String(),
+    errorMessage: Type.Optional(Type.String()),
 });
 export type BrokerMessageDelivery = Static<typeof BrokerMessageDelivery>;
 export const BrokerMessageDelivery = Type.Intersect([
