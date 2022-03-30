@@ -44,7 +44,7 @@ export const ClientMessagePublishOptions = Type.Object({
 });
 export const MESSAGE_ID_LENGTH_MAX = 32;
 export const MESSAGE_ID_MASK = `^[a-z0-9]{1,${MESSAGE_ID_LENGTH_MAX}}$`;
-export const MESSAGE_ID_ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyz";
+export const MESSAGE_ID_ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyz';
 export const MESSAGE_ID_LENGTH_DEFAULT = 20;
 
 export const TOPIC_LENGTH_MAX = 128;
