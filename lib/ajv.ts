@@ -10,24 +10,23 @@ const ajv = new Ajv({
     .addKeyword('kind')
     .addKeyword('modifier');
 
-export const validateObject = <T>(schema: Record<string, unknown>, obj: unknown, throwerror = false): T | null => {
-    const isValid = ajv.validate(schema, obj);
+export const validateObject = <T>(schema: Record<string, unknown>, object: unknown, throwerror = false): T | undefined => {
+    const isValid = ajv.validate(schema, object);
 
     if (isValid)
-        return obj as T;
+        return object as T;
 
     if (throwerror) {
-        let message = 'Validation error';
-        if (ajv.errors)
-            if (ajv.errors[0]) {
-                const path = ajv.errors[0].instancePath;
-                const msg = ajv.errors[0].message || '';
-                message = `${message}: ${path} ${msg}`;
-            }
-        const err = new Error(message);
-        Object.assign(err, { validationErrors: ajv.errors });
-        throw err;
+        let messageString = 'Validation error';
+        if (ajv.errors && ajv.errors[0]) {
+            const path = ajv.errors[0].instancePath;
+            const message = ajv.errors[0].message || '';
+            messageString = `${messageString}: ${path} ${message}`;
+        }
+        const error = new Error(messageString);
+        Object.assign(error, { validationErrors: ajv.errors });
+        throw error;
     }
 
-    return null;
+    return undefined;
 };

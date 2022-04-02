@@ -1,5 +1,5 @@
-import * as net from 'net';
-import { EventEmitter } from 'events';
+import * as net from 'node:net';
+import { EventEmitter } from 'node:events';
 import * as prettyMilliseconds from 'pretty-ms';
 
 const sizeLength = 4;
@@ -21,7 +21,7 @@ export declare interface IBufferedSocket {
 }
 
 export class BufferedSocket extends EventEmitter {
-    private createdAt = new Date().getTime();
+    private createdAt = Date.now();
     private packetStat = {
         inPackets: 0,
         outPackets: 0,
@@ -69,26 +69,23 @@ export class BufferedSocket extends EventEmitter {
     }
 
     private processReceiveBuffer(options: BufferedSocketOptions) {
-        if (this.receiveSize < 0) {
-            if (this.receiveBuffer.length >= sizeLength) {
-                this.receiveSize = this.receiveBuffer.readUInt32LE(0);
-                this.receiveBuffer = this.bufferFrom(this.receiveBuffer, sizeLength);
-            }
+        if (this.receiveSize < 0 && this.receiveBuffer.length >= sizeLength) {
+            this.receiveSize = this.receiveBuffer.readUInt32LE(0);
+            this.receiveBuffer = this.bufferFrom(this.receiveBuffer, sizeLength);
         }
-        if (this.receiveSize >= 0)
-            if (this.receiveBuffer.length >= this.receiveSize) {
-                const sizeToCheck = this.receiveSize;
-                const msg = this.bufferFrom(this.receiveBuffer, 0, this.receiveSize);
-                this.receiveBuffer = this.bufferFrom(this.receiveBuffer, this.receiveSize);
-                this.receiveSize = -1;
-                if (options.maxPacketSize && options.maxPacketSize.value > 0 && sizeToCheck > options.maxPacketSize.value)
-                    options.maxPacketSize.onExcept(sizeToCheck);
-                else {
-                    this.emit('buffered_data', msg);
-                    this.packetStat.inPackets++;
-                }
-                this.processReceiveBuffer(options);
+        if (this.receiveSize >= 0 && this.receiveBuffer.length >= this.receiveSize) {
+            const sizeToCheck = this.receiveSize;
+            const message = this.bufferFrom(this.receiveBuffer, 0, this.receiveSize);
+            this.receiveBuffer = this.bufferFrom(this.receiveBuffer, this.receiveSize);
+            this.receiveSize = -1;
+            if (options.maxPacketSize && options.maxPacketSize.value > 0 && sizeToCheck > options.maxPacketSize.value)
+                options.maxPacketSize.onExcept(sizeToCheck);
+            else {
+                this.emit('buffered_data', message);
+                this.packetStat.inPackets++;
             }
+            this.processReceiveBuffer(options);
+        }
     }
 
     protected setKeepAlive(enable: boolean, initialDelay: number) { this.socket.setKeepAlive(enable, initialDelay); }
@@ -111,9 +108,8 @@ export class BufferedSocket extends EventEmitter {
         if (!this.drained)
             return;
         const buffer = this.sendBuffer.shift();
-        if (buffer)
-            if (!this.socket.write(buffer))
-                this.drained = false;
+        if (buffer && !this.socket.write(buffer))
+            this.drained = false;
     }
 
     protected send(data: Buffer) { this.addToSendBuffer(this.dataBufferToTranferBuffer(data)); }
@@ -130,8 +126,8 @@ export class BufferedSocket extends EventEmitter {
 
     public getSocketStat() {
         return {
-            ageMs: new Date().getTime() - this.createdAt,
-            ageHuman: prettyMilliseconds(new Date().getTime() - this.createdAt, { compact: true }),
+            ageMs: Date.now() - this.createdAt,
+            ageHuman: prettyMilliseconds(Date.now() - this.createdAt, { compact: true }),
             inBytes: this.socket.bytesRead,
             inBytesHuman: prettyBytes(this.socket.bytesRead),
             outBytes: this.socket.bytesWritten,

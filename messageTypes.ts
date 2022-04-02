@@ -48,8 +48,8 @@ export const MESSAGE_ID_ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyz';
 export const MESSAGE_ID_LENGTH_DEFAULT = 20;
 
 export const TOPIC_LENGTH_MAX = 128;
-export const TOPIC_MASK = /^([a-z0-9]+[.])*[a-z0-9]+$/;
-export const TOPIC_WILDCARD_MASK = /^(([a-z0-9]+|[#*])[.])*([a-z0-9]+|[#*])$/;
+export const TOPIC_MASK = /^([\da-z]+\.)*[\da-z]+$/;
+export const TOPIC_WILDCARD_MASK = /^(([\da-z]+|[#*])\.)*([\da-z]+|[#*])$/;
 
 export type ClientMessagePublish = Static<typeof ClientMessagePublish>;
 export const ClientMessagePublish = Type.Object({

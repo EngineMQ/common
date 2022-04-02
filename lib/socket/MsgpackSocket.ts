@@ -1,4 +1,4 @@
-import * as net from 'net';
+import * as net from 'node:net';
 import { BufferedSocket, BufferedSocketOptions, defaultBufferedSocketOptions } from './BufferedSocket';
 import { Packr } from 'msgpackr';
 
@@ -11,7 +11,7 @@ export declare interface MsgpackSocket {
     on(event: 'end', listener: () => void): this;
     on(event: 'close', listener: (hadError: boolean) => void): this;
 
-    on(event: 'obj_data', listener: (obj: object) => void): this;
+    on(event: 'obj_data', listener: (object: object) => void): this;
 }
 export class MsgpackSocket extends BufferedSocket {
     constructor(socket: net.Socket, options: BufferedSocketOptions = defaultBufferedSocketOptions) {
@@ -22,5 +22,5 @@ export class MsgpackSocket extends BufferedSocket {
         });
     }
 
-    sendObj(obj: any) { super.send(packr.pack(obj || {})); }
+    sendObj(object: any) { super.send(packr.pack(object || {})); }
 }
