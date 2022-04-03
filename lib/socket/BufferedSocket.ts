@@ -115,6 +115,7 @@ export class BufferedSocket extends EventEmitter {
     protected send(data: Buffer) { this.addToSendBuffer(this.dataBufferToTranferBuffer(data)); }
 
     protected destroy(error?: Error) { this.socket.destroy(error); }
+    protected end() { this.socket.end(); }
 
     public getSocketAddressInfo() {
         return {
