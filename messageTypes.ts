@@ -79,7 +79,6 @@ export type BrokerMessageWelcome = Static<typeof BrokerMessageWelcome>;
 export const BrokerMessageWelcome = Type.Object({
     version: Type.String(),
     heartbeatSec: Type.Integer(),
-    errorCode: Type.Optional(Type.String()),
     errorMessage: Type.Optional(Type.String()),
 });
 
@@ -89,7 +88,6 @@ export const BrokerMessageHeartbeat = Type.Object({});
 export type BrokerMessagePublishAck = Static<typeof BrokerMessagePublishAck>;
 export const BrokerMessagePublishAck = Type.Object({
     messageId: Type.String(),
-    errorCode: Type.Optional(Type.String()),
     errorMessage: Type.Optional(Type.String()),
 });
 export type BrokerMessageDelivery = Static<typeof BrokerMessageDelivery>;
