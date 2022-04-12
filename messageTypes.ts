@@ -12,6 +12,7 @@ export const ClientMessageHello = Type.Object({
     clientId: Type.String(),
     maxWorkers: Type.Number(),
     version: Type.String(),
+    authToken: Type.String(),
 });
 
 export type ClientMessageHeartbeat = Static<typeof ClientMessageHeartbeat>;
@@ -78,6 +79,8 @@ export type BrokerMessageWelcome = Static<typeof BrokerMessageWelcome>;
 export const BrokerMessageWelcome = Type.Object({
     version: Type.String(),
     heartbeatSec: Type.Integer(),
+    errorCode: Type.Optional(Type.String()),
+    errorMessage: Type.Optional(Type.String()),
 });
 
 export type BrokerMessageHeartbeat = Static<typeof BrokerMessageHeartbeat>;
@@ -86,6 +89,7 @@ export const BrokerMessageHeartbeat = Type.Object({});
 export type BrokerMessagePublishAck = Static<typeof BrokerMessagePublishAck>;
 export const BrokerMessagePublishAck = Type.Object({
     messageId: Type.String(),
+    errorCode: Type.Optional(Type.String()),
     errorMessage: Type.Optional(Type.String()),
 });
 export type BrokerMessageDelivery = Static<typeof BrokerMessageDelivery>;
