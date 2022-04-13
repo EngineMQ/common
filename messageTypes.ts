@@ -5,14 +5,14 @@ import { Static, Type } from '@sinclair/typebox';
 
 /* Client side */
 
-export type ClientMessageType = 'hello' | 'heartbeat' | 'subscribe' | 'publish' | 'deliveryAck' | 'deliveryResolve' | 'deliveryReject';
+export type ClientMessageType = 'login' | 'heartbeat' | 'subscribe' | 'publish' | 'deliveryAck' | 'deliveryResolve' | 'deliveryReject';
 
-export type ClientMessageHello = Static<typeof ClientMessageHello>;
-export const ClientMessageHello = Type.Object({
+export type ClientMessageLogin = Static<typeof ClientMessageLogin>;
+export const ClientMessageLogin = Type.Object({
     clientId: Type.String(),
+    authToken: Type.String(),
     maxWorkers: Type.Number(),
     version: Type.String(),
-    authToken: Type.String(),
 });
 
 export type ClientMessageHeartbeat = Static<typeof ClientMessageHeartbeat>;
@@ -73,11 +73,10 @@ export const ClientMessageDeliveryAck = Type.Object({
 
 /* Broker side */
 
-export type BrokerMessageType = 'welcome' | 'heartbeat' | 'publishAck' | 'delivery' | 'deliveryreport';
+export type BrokerMessageType = 'loginAck' | 'heartbeat' | 'subscribeAck' | 'publishAck' | 'delivery' | 'deliveryReport';
 
-export type BrokerMessageWelcome = Static<typeof BrokerMessageWelcome>;
-export const BrokerMessageWelcome = Type.Object({
-    version: Type.String(),
+export type BrokerMessageLoginAck = Static<typeof BrokerMessageLoginAck>;
+export const BrokerMessageLoginAck = Type.Object({
     heartbeatSec: Type.Integer(),
     errorMessage: Type.Optional(Type.String()),
 });
@@ -85,11 +84,21 @@ export const BrokerMessageWelcome = Type.Object({
 export type BrokerMessageHeartbeat = Static<typeof BrokerMessageHeartbeat>;
 export const BrokerMessageHeartbeat = Type.Object({});
 
+export type BrokerMessageSubscribeAck = Static<typeof BrokerMessageSubscribeAck>;
+export const BrokerMessageSubscribeAck = Type.Object({
+    errors: Type.Array(
+        Type.Object({
+            topic: Type.String(),
+            errorMessage: Type.Optional(Type.String()),
+        }))
+});
+
 export type BrokerMessagePublishAck = Static<typeof BrokerMessagePublishAck>;
 export const BrokerMessagePublishAck = Type.Object({
-    messageId: Type.String(),
+    messageId: Type.Optional(Type.String()),
     errorMessage: Type.Optional(Type.String()),
 });
+
 export type BrokerMessageDelivery = Static<typeof BrokerMessageDelivery>;
 export const BrokerMessageDelivery = Type.Intersect([
     ClientMessagePublish,
