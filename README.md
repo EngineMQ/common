@@ -1,3 +1,4 @@
+# Shared type library for Engine-MQ
 
 This repo creates a strongly typed relationship between the EngineMQ client and the broker. There is **no need for anyone to use this directly**, because the right components will use it automatically:
 
